@@ -1,49 +1,57 @@
-import { galleryItems } from "./gallery-items";
+import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-// создаємо елементи img
+//створюємо слоти із зображенням з масива у строку
+function galleryItemCreate(galleryItems) {
+  return galleryItems
+    .map(({ preview, original, description }) => {
+      return `<li class="gallery__item">
+            <a class="gallery__link" href="${original}"><img
+            class="gallery__image"
+            src="${preview}"
+            data-source="${original}"
+            alt="${description}"
+          />
+        </a>
+      </li>`;
+    })
+    .join("");
+}
+const items = galleryItemCreate(galleryItems); //створення посилання на строку з зображенням
+console.log(galleryItemCreate(galleryItems)); //перевірка створення div з class="gallery__item"
 
-// function createGalleryItem(galleryItems) {
-//     return galleryItems.map(({ preview, original, description }) => {
-//         return `<div class="gallery__item">
-//           <a class="gallery__link" href="${original}">
-//             <img class="gallery__image"
-//               src="${preview}"
-//               data-source="${original}"
-//               alt="${description}" /> </a> </div>`;
-//       })
-//       .join("");
-//   }
+//додаємо слоти з зображенням до розмітки
 
+const gallery = document.querySelector(".gallery"); // DOM для gallery
 
+gallery.insertAdjacentHTML("beforeend", items); // додаємо до HTML розмітки зображення
+gallery.addEventListener("click", onClick); // додаємо до спостерігача click до  зображення
 
-// // добавляємо улементы img в HTML
-// const gallery = document.querySelector(".gallery");
+function onClick(evt) {
+  evt.preventDefault(); // прибираємо дію за замовчуванням дію браузера за подією
 
-// function creatMarkup() {
-//   let markup = "";
-//   for (let i = 0; i < 9; i += 1) {
-//     markup += `<li class="gallery__item">
-//     //           <a class="gallery__link" href="${original}">
-//     //             <img class="gallery__image"
-//     //               src="${preview}"
-//     //               data-source="${original}"
-//     //               alt="${description}" /> </a> </li>`;
-//   }
-//   content.innerHTML = markup;}
-// creatMarkup();
-// content.addEventListener('click', onclick);
+  const imgClick = evt.target.classList.contains("gallery__image"); //перевірка наявності вказанного CSS-класса у списку класів елемента, якщо ні - закінчити виконання
+  if (!imgClick) {
+    return;
+  }
+  // додаємо плагіна basicLightbox до розмітки
+  const banner = basicLightbox.create(`<img src="${evt.target.dataset.source}" width="600">`,{
+    BanerOn() {
+        document.on("keyup", esc); // додаємо спостерігача на відкриття
+      },
+      
+      BanerOff() {
+        document.off("keyup", esc); // додаємо спостерігача на відкриття
+      },
+    });
+//закриваємо банер з екрана
+  const esc = (event) => {
+    if (event.key === "Escape") {
+      banner.close();
+    }
+  };
 
-// function onclick(evt){
-//     if(!evt.target.classList.contains('js-target')){
-//    return;     
-//     }
-//     console.log(evt.target);
-// }
+  banner.show();
+}
 
-
-
-
-
-
-// console.log(galleryItems);
+console.log(galleryItems);
