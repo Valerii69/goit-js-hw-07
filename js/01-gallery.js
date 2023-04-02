@@ -35,25 +35,33 @@ function onClick(evt) {
     return;
   }
   // додаємо плагіна basicLightbox до розмітки
-  const banner = basicLightbox.create(`<img src="${evt.target.dataset.source}" width="600">`,{
-    onShow() {
-      document.addEventListener("keyup", onEscPress);
-    },
-    onClose() {
-      document.removeEventListener("keyup", onEscPress);
+  const banner = basicLightbox.create(
+    `<img src="${evt.target.dataset.source}" width="600">`,
+    {
+      onShow() {
+        document.addEventListener("keyup", onEscPress);
+      },
+      onClose() {
+        document.removeEventListener("keyup", onEscPress);
+      },
     }
-  });
-//закриваємо банер з екрана
-function onEscPress(evt) {
-  if (evt.key === "Escape") {
-    banner.close();
-  }};
+  );
+  //закриваємо банер з екрана 
+  function onEscPress(evt) { //будь-якою клавішею 
+    if (evt.key !== "Escape") {
+      banner.close();
+    }
+
+    if (evt.key === "Escape") {//клавішею  'Esc'
+      banner.close();
+    }
+    
+  }
 
   banner.show();
 }
 
 console.log(galleryItems);
-
 
 // Закриття модального вікна по клавіші Esc не працює, треба використовувати add/removeEventListener.
 // console.log(galleryItemCreate(galleryItems)) - це не просто перевірка, а ще один виклик функції, який не потрібен, щоб перевірити - треба items в консолі дивитись.
